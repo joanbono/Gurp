@@ -78,7 +78,7 @@ The header `Location: #` indicates where the scan is located.
 ### Get Scan
 
 ```bash
-curl -X GET $ENDPOING/scan/7
+curl -X GET $ENDPOINT/scan/7
 ```
 
 + Request
