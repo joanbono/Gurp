@@ -76,6 +76,6 @@ func main() {
 	if scan == "" && scan_id != "" {
 		commander.GetScan(target, port, scan_id)
 	}
-	commander.Printer("test test")
+	//commander.Printer("test test")
 
 }

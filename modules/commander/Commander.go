@@ -3,6 +3,7 @@ package commander
 import (
 	"crypto/tls"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"time"
 
@@ -43,6 +44,7 @@ func GetScan(target, port, Location string) {
 	if resp.StatusCode != 200 {
 		fmt.Fprintf(color.Output, "%v Scan ID %v not found.\n", red(" [-] ERROR"), Location)
 	} else {
-		fmt.Println(resp.Body)
+		body, _ := ioutil.ReadAll(resp.Body)
+		fmt.Println("response Body:", string(body))
 	}
 }
