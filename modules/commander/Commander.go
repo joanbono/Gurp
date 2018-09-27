@@ -45,6 +45,7 @@ func GetScan(target, port, Location string) {
 		fmt.Fprintf(color.Output, "%v Scan ID %v not found.\n", red(" [-] ERROR"), Location)
 	} else {
 		body, _ := ioutil.ReadAll(resp.Body)
-		fmt.Println("response Body:", string(body))
+		fmt.Fprintf(color.Output, "%v Response body:\n %v \n", cyan(" [i] INFO"), string(body))
+		//fmt.Println(body)
 	}
 }
