@@ -22,7 +22,8 @@ var VERSION = `1.0.0`
 //var BurpAPI, username, password, ApiToken string
 var target, port string = "127.0.0.1", "1337"
 var key, issue_type, issue_name string
-var metrics, description, issues string
+var description string
+var metrics, issues bool = false, false
 var scan, scan_id, username, password string
 
 func init() {
@@ -39,9 +40,9 @@ func init() {
 	flaggy.String(&scan, "s", "scan", "URLs to scan")
 	flaggy.String(&scan_id, "S", "scan-id", "Scanned URL identifier")
 
-	flaggy.String(&metrics, "m", "metrics", "Provides metrics for a given task")
+	flaggy.Bool(&metrics, "M", "metrics", "Provides metrics for a given task")
 	flaggy.String(&description, "d", "description", "Provides description for a given issue")
-	flaggy.String(&description, "I", "issues", "Provides issues for a given task")
+	flaggy.Bool(&issues, "I", "issues", "Provides issues for a given task")
 
 	flaggy.String(&key, "k", "key", "Api Key")
 	flaggy.String(&issue_type, "i", "issue-type", "String to search for")
@@ -73,8 +74,14 @@ func main() {
 
 	}
 
-	if scan == "" && scan_id != "" {
+	if scan == "" && scan_id != "" && metrics == false && issues == true {
 		commander.GetScan(target, port, scan_id)
+	} else if scan == "" && scan_id != "" && metrics == true && issues == false {
+		//commander.GetScan(target, port, scan_id)
+		commander.GetMetrics(target, port, scan_id)
+	} else if scan == "" && scan_id != "" && metrics == true && issues == true {
+		commander.GetScan(target, port, scan_id)
+		commander.GetMetrics(target, port, scan_id)
 	}
 	//commander.Printer("test test")
 
