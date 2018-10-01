@@ -1,4 +1,4 @@
-![](img/Gurp_logo.png)
+![](img/Gurp_banner.png)
 
 ## Usage
 
