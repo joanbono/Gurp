@@ -7,8 +7,8 @@ import (
 	"github.com/fatih/color"
 	"github.com/integrii/flaggy"
 
-	"github.com/joanbono/Gommander/modules/commander"
-	"github.com/joanbono/Gommander/modules/configure"
+	"github.com/joanbono/Gurp/modules/commander"
+	"github.com/joanbono/Gurp/modules/configure"
 )
 
 // Defining colors
@@ -30,7 +30,7 @@ var scan, scan_id string
 var version, description_names bool = false, false
 
 func init() {
-	flaggy.SetName("Gommander")
+	flaggy.SetName("Gurp")
 	flaggy.SetDescription("Interact with Burp API")
 	flaggy.DefaultParser.ShowVersionWithVersionFlag = false
 
@@ -50,7 +50,7 @@ func init() {
 	flaggy.String(&export, "e", "export", "Export issues' json.")
 
 	flaggy.String(&key, "k", "key", "Api Key")
-	flaggy.Bool(&version, "v", "version", "Gommander version")
+	flaggy.Bool(&version, "v", "version", "Gurp version")
 }
 
 func main() {
@@ -59,7 +59,7 @@ func main() {
 	//configure.Configurer("test test")
 	//fmt.Println(target, port)
 	if version == true {
-		fmt.Fprintf(color.Output, "%v Gommander %v.\n", cyan(" [i] INFO:"), VERSION)
+		fmt.Fprintf(color.Output, "%v Gurp %v.\n", cyan(" [i] INFO:"), VERSION)
 		os.Exit(0)
 	}
 	if configure.CheckBurp(target, port, key) == true {

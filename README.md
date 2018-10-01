@@ -1,10 +1,10 @@
-![](img/Gommander_logo.png)
+![](img/Gurp_logo.png)
 
 ## Usage
 
 ```bash
-$ go run Gommander.go -h
-Gommander - Interact with Burp API  Flags:
+$ go run Gurp.go -h
+Gurp - Interact with Burp API  Flags:
     -h --help  Displays help with available flag, subcommand, and positional value parameters.
     -t --target  Burp Address. Default 127.0.0.1
     -p --port  Burp API Port. Default 1337
@@ -18,13 +18,13 @@ Gommander - Interact with Burp API  Flags:
     -I --issues  Provides issues for a given task
     -e --export  Export issues json.
     -k --key  Api Key
-    -v --version  Gommander version
+    -v --version  Gurp version
 ```
 
 + Create a scan
 
 ```bash
-go run Gommander.go -s "localhost.com/WebGoat/attack"
+go run Gurp.go -s "localhost.com/WebGoat/attack"
  [+] SUCCESS: Found Burp API endpoint on 127.0.0.1:1337.
  [i] INFO Setting up scanner...
  [+] SUCCESS: Scanning localhost.com/WebGoat/attack over 8.
@@ -33,7 +33,7 @@ go run Gommander.go -s "localhost.com/WebGoat/attack"
 + Get Scan Metrics
 
 ```bash
-go run Gommander.go -S 8 -M
+go run Gurp.go -S 8 -M
  [+] SUCCESS: Found Burp API endpoint on 127.0.0.1:1337.
  [!] ALERT Retrieving Metrics from task 8
           [i] INFO: Scan status succeeded
@@ -49,7 +49,7 @@ go run Gommander.go -S 8 -M
 + Get Issues from scan
 
 ```bash
-go run Gommander.go -S 8 -I
+go run Gurp.go -S 8 -I
  [+] SUCCESS: Found Burp API endpoint on 127.0.0.1:1337.
  [!] ALERT: Retrieving Issues from task 8
          [i] INFO: Frameable response (potential Clickjacking)
@@ -62,7 +62,7 @@ go run Gommander.go -S 8 -I
 + Export Issues' json
 
 ```bash
-go run Gommander.go -S 8 -e /tmp
+go run Gurp.go -S 8 -e /tmp
  [+] SUCCESS: Found Burp API endpoint on 127.0.0.1:1337.
  [!] ALERT: Retrieving Issues from task 8
          [i] INFO: Frameable response (potential Clickjacking)
@@ -76,7 +76,7 @@ go run Gommander.go -S 8 -e /tmp
 + Launch an authenticated scan with user/password
 
 ```bash
-go run Gommander.go -s test.com -U admin -P 1234
+go run Gurp.go -s test.com -U admin -P 1234
  [+] SUCCESS: Found Burp API endpoint on 127.0.0.1:1337.
  [i] INFO Setting up scanner using credentials admin:1234
  [+] SUCCESS: Scanning test.com over 13.
@@ -85,7 +85,7 @@ go run Gommander.go -s test.com -U admin -P 1234
 + Connect to Burp using API Key
 
 ```bash
-go run Gommander.go -k "APIKEY" -d | grep -i SQL
+go run Gurp.go -k "APIKEY" -d | grep -i SQL
          [2] SQL injection
          [3] SQL injection (second order)
          [35] Client-side SQL injection (DOM-based)
