@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/fatih/color"
@@ -15,6 +16,10 @@ var yellow = color.New(color.Bold, color.FgYellow).SprintfFunc()
 var red = color.New(color.Bold, color.FgRed).SprintfFunc()
 var cyan = color.New(color.Bold, color.FgCyan).SprintfFunc()
 var green = color.New(color.Bold, color.FgGreen).SprintfFunc()
+var redBG = color.New(color.Bold, color.FgWhite, color.BgHiRed).SprintfFunc()
+var cyanBG = color.New(color.Bold, color.FgBlack, color.BgHiCyan).SprintfFunc()
+var yellowBG = color.New(color.Bold, color.FgBlack, color.BgHiYellow).SprintfFunc()
+var greenBG = color.New(color.Bold, color.FgBlack, color.BgHiGreen).SprintfFunc()
 
 // Skipping SSL verification
 var tr = &http.Transport{
@@ -46,8 +51,7 @@ func GetMetrics(target, port, Location string) {
 		fmt.Fprintf(color.Output, "%v Scan ID %v not found.\n", red(" [-] ERROR"), Location)
 	} else {
 		body, _ := ioutil.ReadAll(resp.Body)
-		//var data = json.NewDecoder(resp.Body)
-		//fmt.Fprintf(color.Output, "%v Response body:\n %v \n", cyan(" [i] INFO"), string(body))
+		//println(string(body))
 		fmt.Fprintf(color.Output, "%v Retrieving Metrics from task %v \n", yellow(" [!] ALERT"), Location)
 
 		//Retrieving info from response
@@ -72,34 +76,31 @@ func GetMetrics(target, port, Location string) {
 	}
 }
 
-func GetScan(target, port, Location string) {
+func GetScan(target, port, Location, exportFolder string) {
 	var issue_uniq string = ""
 	var endpoint string = "http://" + target + ":" + port + "/v0.1/scan/" + Location
 
 	resp, err := client.Get(endpoint)
 
 	if err != nil {
-		fmt.Fprintf(color.Output, "%v Can't perform request to %v.\n", red(" [-] ERROR"), endpoint)
+		fmt.Fprintf(color.Output, "%v Can't perform request to %v.\n", red(" [-] ERROR:"), endpoint)
 	}
 
 	defer resp.Body.Close()
 
 	if resp.StatusCode != 200 {
-		fmt.Fprintf(color.Output, "%v Scan ID %v not found.\n", red(" [-] ERROR"), Location)
+		fmt.Fprintf(color.Output, "%v Scan ID %v not found.\n", red(" [-] ERROR:"), Location)
 	} else {
 		body, _ := ioutil.ReadAll(resp.Body)
-		//var data = json.NewDecoder(resp.Body)
-		//fmt.Fprintf(color.Output, "%v Response body:\n %v \n", cyan(" [i] INFO"), string(body))
-		fmt.Fprintf(color.Output, "%v Retrieving alerts from task %v \n", yellow(" [!] ALERT"), Location)
+		fmt.Fprintf(color.Output, "%v Retrieving Issues from task %v \n", yellow(" [!] ALERT:"), Location)
 
 		value := gjson.Get(string(body), "issue_events")
-		//println(value.String())
-		//println(value.String())
-		//test := gjson.Get(value.String(), "..#.id")
-		t1 := value.String()[1 : len(value.String())-1]
-		//println(t1)
-		issue_names := gjson.Get(t1, "..#.issue.name")
-		severity := gjson.Get(t1, "..#.issue.severity")
+		raw_issues := value.String()[1 : len(value.String())-1]
+
+		// at raw_issues we have every field in json format
+		// println(raw_issues)
+		issue_names := gjson.Get(raw_issues, "..#.issue.name")
+		severity := gjson.Get(raw_issues, "..#.issue.severity")
 		//println(issue_names.String())
 
 		var index []string
@@ -107,15 +108,38 @@ func GetScan(target, port, Location string) {
 			index = append(index, criticity.String())
 		}
 
-		//var test []string(severity.Array())
 		// Printing issue names removing duplicates
 		for k, name := range issue_names.Array() {
 			if issue_uniq != name.String() {
-				//println(index[k])
-				fmt.Fprintf(color.Output, "\t %v --%v-- %v \n", cyan(" [!] INFO:"), index[k], name.String())
-				//println(name.String())
+				if index[k] == "low" {
+					fmt.Fprintf(color.Output, "\t %v %v \n", greenBG("[!] LOW:"), name.String())
+				} else if index[k] == "high" {
+					fmt.Fprintf(color.Output, "\t %v %v \n", redBG("[!] HIGH:"), name.String())
+				} else if index[k] == "medium" {
+					fmt.Fprintf(color.Output, "\t %v %v \n", yellowBG("[!] MEDIUM:"), name.String())
+				} else if index[k] == "info" {
+					fmt.Fprintf(color.Output, "\t %v %v \n", cyanBG("[!] INFO:"), name.String())
+				}
 			}
 			issue_uniq = name.String()
+		}
+
+		if exportFolder != "" {
+			fmt.Fprintf(color.Output, "%v Exporting raw json to %v \n", yellow(" [!] ALERT:"), exportFolder)
+
+			if _, err := os.Stat(exportFolder); !os.IsNotExist(err) {
+				// Write raw_issues to file
+				f, err := os.Create(exportFolder + "/Burp_export.json")
+				if err != nil {
+					panic(err)
+				}
+				defer f.Close()
+				f.WriteString(value.String())
+				f.Sync()
+
+			} else {
+				fmt.Fprintf(color.Output, "%v Folder %v don't exists.\n", red(" [-] ERROR:"), exportFolder)
+			}
 		}
 	}
 }

@@ -21,10 +21,13 @@ var VERSION = `1.0.0`
 
 //var BurpAPI, username, password, ApiToken string
 var target, port string = "127.0.0.1", "1337"
-var key, issue_type, issue_name string
-var description string
+var export string
+var username, password string = "", ""
+var key string
+var description string = ""
 var metrics, issues bool = false, false
-var scan, scan_id, username, password string
+var scan, scan_id string
+var version bool = false
 
 func init() {
 	flaggy.SetName("Gommander")
@@ -41,13 +44,12 @@ func init() {
 	flaggy.String(&scan_id, "S", "scan-id", "Scanned URL identifier")
 
 	flaggy.Bool(&metrics, "M", "metrics", "Provides metrics for a given task")
-	flaggy.String(&description, "d", "description", "Provides description for a given issue")
+	flaggy.String(&description, "D", "description", "Provides description for a given issue")
 	flaggy.Bool(&issues, "I", "issues", "Provides issues for a given task")
+	flaggy.String(&export, "e", "export", "Export issues' json.")
 
 	flaggy.String(&key, "k", "key", "Api Key")
-	flaggy.String(&issue_type, "i", "issue-type", "String to search for")
-	flaggy.String(&issue_name, "n", "issue-name", "String to search for")
-
+	flaggy.Bool(&version, "v", "version", "Gommander version")
 }
 
 func main() {
@@ -55,6 +57,10 @@ func main() {
 
 	//configure.Configurer("test test")
 	//fmt.Println(target, port)
+	if version == true {
+		fmt.Fprintf(color.Output, "%v Gommander %v.\n", cyan(" [i] INFO:"), VERSION)
+		os.Exit(0)
+	}
 	if configure.CheckBurp(target, port) == true {
 		fmt.Fprintf(color.Output, "%v Found Burp API endpoint on %v.\n", green(" [+] SUCCESS:"), target+":"+port)
 	} else {
@@ -64,7 +70,7 @@ func main() {
 
 	if scan != "" {
 		//fmt.Println(configure.ScanConfig(target, port, scan))
-		Location := configure.ScanConfig(target, port, scan)
+		Location := configure.ScanConfig(target, port, scan, username, password)
 		if Location != "" {
 			fmt.Fprintf(color.Output, "%v Scanning %v over %v.\n", green(" [+] SUCCESS:"), scan, Location)
 		} else {
@@ -74,15 +80,17 @@ func main() {
 
 	}
 
-	if scan == "" && scan_id != "" && metrics == false && issues == true {
-		commander.GetScan(target, port, scan_id)
-	} else if scan == "" && scan_id != "" && metrics == true && issues == false {
+	if scan == "" && scan_id != "" && metrics == true && issues == false {
 		//commander.GetScan(target, port, scan_id)
 		commander.GetMetrics(target, port, scan_id)
 	} else if scan == "" && scan_id != "" && metrics == true && issues == true {
-		commander.GetScan(target, port, scan_id)
+		commander.GetScan(target, port, scan_id, export)
 		commander.GetMetrics(target, port, scan_id)
+	} else if scan == "" && scan_id != "" && metrics == false {
+		commander.GetScan(target, port, scan_id, export)
 	}
-	//commander.Printer("test test")
 
+	if description != "" {
+		configure.GetDescription(target, port, description)
+	}
 }
