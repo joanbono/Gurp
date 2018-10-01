@@ -17,6 +17,12 @@ go get -u -v github.com/grokify/html-strip-tags-go
 
 ***
 
+## Binaries
+
+Latest version available [here](https://github.com/joanbono/Gurp/releases/latest).
+
+***
+
 ## Building
 
 ```bash
