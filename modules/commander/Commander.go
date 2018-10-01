@@ -36,8 +36,13 @@ func Printer(test string) {
 	fmt.Fprintf(color.Output, "%v %v TEST\n", green(" [+] SUCCESS"), test)
 }
 
-func GetMetrics(target, port, Location string) {
-	var endpoint string = "http://" + target + ":" + port + "/v0.1/scan/" + Location
+func GetMetrics(target, port, Location, apikey string) {
+	var endpoint string
+	if apikey != "" {
+		endpoint = "http://" + target + ":" + port + "/" + apikey + "/v0.1/scan/" + Location
+	} else {
+		endpoint = "http://" + target + ":" + port + "/v0.1/scan" + Location
+	}
 
 	resp, err := client.Get(endpoint)
 
@@ -76,9 +81,14 @@ func GetMetrics(target, port, Location string) {
 	}
 }
 
-func GetScan(target, port, Location, exportFolder string) {
+func GetScan(target, port, Location, exportFolder, apikey string) {
 	var issue_uniq string = ""
-	var endpoint string = "http://" + target + ":" + port + "/v0.1/scan/" + Location
+	var endpoint string
+	if apikey != "" {
+		endpoint = "http://" + target + ":" + port + "/" + apikey + "/v0.1/scan/" + Location
+	} else {
+		endpoint = "http://" + target + ":" + port + "/v0.1/scan" + Location
+	}
 
 	resp, err := client.Get(endpoint)
 

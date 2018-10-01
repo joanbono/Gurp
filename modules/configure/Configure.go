@@ -42,8 +42,13 @@ func Configurer(test string) {
 	fmt.Fprintf(color.Output, "%v %v TEST\n", green(" [+] SUCCESS"), test)
 }
 
-func CheckBurp(target, port string) (response bool) {
-	var endpoint string = "http://" + target + ":" + port + "/v0.1/"
+func CheckBurp(target, port, apikey string) (response bool) {
+	var endpoint string
+	if apikey != "" {
+		endpoint = "http://" + target + ":" + port + "/" + apikey + "/v0.1/"
+	} else {
+		endpoint = "http://" + target + ":" + port + "/v0.1/"
+	}
 
 	resp, err := client.Get(endpoint)
 
@@ -61,8 +66,13 @@ func CheckBurp(target, port string) (response bool) {
 
 }
 
-func ScanConfig(target, port, urls, username, password string) (ScanLocation string) {
-	var endpoint string = "http://" + target + ":" + port + "/v0.1/scan"
+func ScanConfig(target, port, urls, username, password, apikey string) (ScanLocation string) {
+	var endpoint string
+	if apikey != "" {
+		endpoint = "http://" + target + ":" + port + "/" + apikey + "/v0.1/scan"
+	} else {
+		endpoint = "http://" + target + ":" + port + "/v0.1/scan"
+	}
 	var url_string string
 	// At the moment, this only allows 1 url to be scanned
 	if username == "" && password == "" {
@@ -95,8 +105,13 @@ func ScanConfig(target, port, urls, username, password string) (ScanLocation str
 	return Location
 }
 
-func GetDescription(target, port, issueName string) {
-	var endpoint string = "http://" + target + ":" + port + "/v0.1/knowledge_base/issue_definitions"
+func GetDescription(target, port, issueName, apikey string) {
+	var endpoint string
+	if apikey != "" {
+		endpoint = "http://" + target + ":" + port + "/" + apikey + "/v0.1/knowledge_base/issue_definitions"
+	} else {
+		endpoint = "http://" + target + ":" + port + "/v0.1/knowledge_base/issue_definitions"
+	}
 
 	resp, err := client.Get(endpoint)
 
@@ -126,8 +141,13 @@ func GetDescription(target, port, issueName string) {
 
 }
 
-func GetNames(target, port string) {
-	var endpoint string = "http://" + target + ":" + port + "/v0.1/knowledge_base/issue_definitions"
+func GetNames(target, port, apikey string) {
+	var endpoint string
+	if apikey != "" {
+		endpoint = "http://" + target + ":" + port + "/" + apikey + "/v0.1/knowledge_base/issue_definitions"
+	} else {
+		endpoint = "http://" + target + ":" + port + "/v0.1/knowledge_base/issue_definitions"
+	}
 
 	resp, err := client.Get(endpoint)
 

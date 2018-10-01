@@ -23,7 +23,7 @@ var VERSION = `1.0.0`
 var target, port string = "127.0.0.1", "1337"
 var export string
 var username, password string = "", ""
-var key string
+var key string = ""
 var description string = ""
 var metrics, issues bool = false, false
 var scan, scan_id string
@@ -62,7 +62,7 @@ func main() {
 		fmt.Fprintf(color.Output, "%v Gommander %v.\n", cyan(" [i] INFO:"), VERSION)
 		os.Exit(0)
 	}
-	if configure.CheckBurp(target, port) == true {
+	if configure.CheckBurp(target, port, key) == true {
 		fmt.Fprintf(color.Output, "%v Found Burp API endpoint on %v.\n", green(" [+] SUCCESS:"), target+":"+port)
 	} else {
 		fmt.Fprintf(color.Output, "%v No Burp API endpoint found on %v.\n", red(" [-] ERROR:"), target+":"+port)
@@ -71,7 +71,7 @@ func main() {
 
 	if scan != "" {
 		//fmt.Println(configure.ScanConfig(target, port, scan))
-		Location := configure.ScanConfig(target, port, scan, username, password)
+		Location := configure.ScanConfig(target, port, scan, username, password, key)
 		if Location != "" {
 			fmt.Fprintf(color.Output, "%v Scanning %v over %v.\n", green(" [+] SUCCESS:"), scan, Location)
 		} else {
@@ -83,18 +83,18 @@ func main() {
 
 	if scan == "" && scan_id != "" && metrics == true && issues == false {
 		//commander.GetScan(target, port, scan_id)
-		commander.GetMetrics(target, port, scan_id)
+		commander.GetMetrics(target, port, scan_id, key)
 	} else if scan == "" && scan_id != "" && metrics == true && issues == true {
-		commander.GetScan(target, port, scan_id, export)
-		commander.GetMetrics(target, port, scan_id)
+		commander.GetScan(target, port, scan_id, export, key)
+		commander.GetMetrics(target, port, scan_id, key)
 	} else if scan == "" && scan_id != "" && metrics == false {
-		commander.GetScan(target, port, scan_id, export)
+		commander.GetScan(target, port, scan_id, export, key)
 	}
 
 	if description != "" {
-		configure.GetDescription(target, port, description)
+		configure.GetDescription(target, port, description, key)
 	}
 	if description_names == true {
-		configure.GetNames(target, port)
+		configure.GetNames(target, port, key)
 	}
 }
