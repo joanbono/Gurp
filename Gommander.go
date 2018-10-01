@@ -27,7 +27,7 @@ var key string
 var description string = ""
 var metrics, issues bool = false, false
 var scan, scan_id string
-var version bool = false
+var version, description_names bool = false, false
 
 func init() {
 	flaggy.SetName("Gommander")
@@ -45,6 +45,7 @@ func init() {
 
 	flaggy.Bool(&metrics, "M", "metrics", "Provides metrics for a given task")
 	flaggy.String(&description, "D", "description", "Provides description for a given issue")
+	flaggy.Bool(&description_names, "d", "description-names", "Returns vulnerability names from PortSwigger")
 	flaggy.Bool(&issues, "I", "issues", "Provides issues for a given task")
 	flaggy.String(&export, "e", "export", "Export issues' json.")
 
@@ -92,5 +93,8 @@ func main() {
 
 	if description != "" {
 		configure.GetDescription(target, port, description)
+	}
+	if description_names == true {
+		configure.GetNames(target, port)
 	}
 }

@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/fatih/color"
@@ -95,8 +96,6 @@ func ScanConfig(target, port, urls, username, password string) (ScanLocation str
 }
 
 func GetDescription(target, port, issueName string) {
-	//println(issueName)
-
 	var endpoint string = "http://" + target + ":" + port + "/v0.1/knowledge_base/issue_definitions"
 
 	resp, err := client.Get(endpoint)
@@ -111,14 +110,10 @@ func GetDescription(target, port, issueName string) {
 		fmt.Fprintf(color.Output, "%v Resource not found.\n", red(" [-] ERROR:"))
 	} else {
 		body, _ := ioutil.ReadAll(resp.Body)
-		//fmt.Fprintf(color.Output, "%v Retrieving Issues from task %v \n", yellow(" [!] ALERT:"), Location)
 		fmt.Fprintf(color.Output, "%v Fetching '%v' information...\n", cyan(" [i] INFO:"), issueName)
-		//println(string(body))
 		raw_issues := string(body)[1 : len(string(body))-1]
 		var descriptionSelected string = `..#[name="` + issueName + `"]`
-		//value := gjson.Get(raw_issues, "..#.name")
 		value := gjson.Get(raw_issues, descriptionSelected)
-		//println(value.String())
 
 		description := gjson.Get(value.String(), "description")
 		desc_stripped := strip.StripTags(description.String())
@@ -127,17 +122,34 @@ func GetDescription(target, port, issueName string) {
 
 		fmt.Fprintf(color.Output, "\t %v %v\n", cyanBG(" [*] DESCRIPTION:"), desc_stripped)
 		fmt.Fprintf(color.Output, "\t %v %v\n", greenBG(" [*] REMEDIATION:"), rem_stripped)
-
-		// var VulnNames []string
-		// for _, test := range value.Array() {
-		// 	//println(test.String())
-		// 	VulnNames = append(VulnNames, test.String())
-		// 	println(test.String())
-
-		// }
-
-		//fmt.Println(VulnNames)
-		//raw_issues := value.String()[1 : len(value.String())-1]
 	}
 
+}
+
+func GetNames(target, port string) {
+	var endpoint string = "http://" + target + ":" + port + "/v0.1/knowledge_base/issue_definitions"
+
+	resp, err := client.Get(endpoint)
+
+	if err != nil {
+		fmt.Fprintf(color.Output, "%v Can't perform request to %v.\n", red(" [-] ERROR:"), endpoint)
+	}
+
+	defer resp.Body.Close()
+
+	if resp.StatusCode != 200 {
+		fmt.Fprintf(color.Output, "%v Resource not found.\n", red(" [-] ERROR:"))
+	} else {
+		body, _ := ioutil.ReadAll(resp.Body)
+		fmt.Fprintf(color.Output, "%v Retrieving vulnerability names...\n", cyan(" [i] INFO:"))
+		raw_issues := string(body)[1 : len(string(body))-1]
+
+		value := gjson.Get(raw_issues, "..#.name")
+
+		var VulnNames []string
+		for k, vulnName := range value.Array() {
+			VulnNames = append(VulnNames, vulnName.String())
+			fmt.Fprintf(color.Output, "\t %v %v\n", cyanBG("["+strconv.Itoa(k+1)+"]"), vulnName.String())
+		}
+	}
 }
