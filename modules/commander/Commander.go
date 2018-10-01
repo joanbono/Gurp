@@ -112,13 +112,13 @@ func GetScan(target, port, Location, exportFolder string) {
 		for k, name := range issue_names.Array() {
 			if issue_uniq != name.String() {
 				if index[k] == "low" {
-					fmt.Fprintf(color.Output, "\t %v %v \n", greenBG("[!] LOW:"), name.String())
+					fmt.Fprintf(color.Output, "\t %v %v \n", greenBG("[*] LOW:"), name.String())
 				} else if index[k] == "high" {
-					fmt.Fprintf(color.Output, "\t %v %v \n", redBG("[!] HIGH:"), name.String())
+					fmt.Fprintf(color.Output, "\t %v %v \n", redBG("[*] HIGH:"), name.String())
 				} else if index[k] == "medium" {
-					fmt.Fprintf(color.Output, "\t %v %v \n", yellowBG("[!] MEDIUM:"), name.String())
+					fmt.Fprintf(color.Output, "\t %v %v \n", yellowBG("[*] MEDIUM:"), name.String())
 				} else if index[k] == "info" {
-					fmt.Fprintf(color.Output, "\t %v %v \n", cyanBG("[!] INFO:"), name.String())
+					fmt.Fprintf(color.Output, "\t %v %v \n", cyanBG("[i] INFO:"), name.String())
 				}
 			}
 			issue_uniq = name.String()

@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/fatih/color"
+	strip "github.com/grokify/html-strip-tags-go"
 	"github.com/tidwall/gjson"
 )
 
@@ -16,6 +17,10 @@ var yellow = color.New(color.Bold, color.FgYellow).SprintfFunc()
 var red = color.New(color.Bold, color.FgRed).SprintfFunc()
 var cyan = color.New(color.Bold, color.FgCyan).SprintfFunc()
 var green = color.New(color.Bold, color.FgGreen).SprintfFunc()
+var redBG = color.New(color.Bold, color.FgWhite, color.BgHiRed).SprintfFunc()
+var cyanBG = color.New(color.Bold, color.FgBlack, color.BgHiCyan).SprintfFunc()
+var yellowBG = color.New(color.Bold, color.FgBlack, color.BgHiYellow).SprintfFunc()
+var greenBG = color.New(color.Bold, color.FgBlack, color.BgHiGreen).SprintfFunc()
 
 // Skipping SSL verification
 var tr = &http.Transport{
@@ -90,11 +95,10 @@ func ScanConfig(target, port, urls, username, password string) (ScanLocation str
 }
 
 func GetDescription(target, port, issueName string) {
-	println(issueName)
+	//println(issueName)
 
 	var endpoint string = "http://" + target + ":" + port + "/v0.1/knowledge_base/issue_definitions"
 
-	println(endpoint)
 	resp, err := client.Get(endpoint)
 
 	if err != nil {
@@ -108,9 +112,31 @@ func GetDescription(target, port, issueName string) {
 	} else {
 		body, _ := ioutil.ReadAll(resp.Body)
 		//fmt.Fprintf(color.Output, "%v Retrieving Issues from task %v \n", yellow(" [!] ALERT:"), Location)
+		fmt.Fprintf(color.Output, "%v Fetching '%v' information...\n", cyan(" [i] INFO:"), issueName)
+		//println(string(body))
+		raw_issues := string(body)[1 : len(string(body))-1]
+		var descriptionSelected string = `..#[name="` + issueName + `"]`
+		//value := gjson.Get(raw_issues, "..#.name")
+		value := gjson.Get(raw_issues, descriptionSelected)
+		//println(value.String())
 
-		value := gjson.Get(string(body), "name")
-		println(value.String())
+		description := gjson.Get(value.String(), "description")
+		desc_stripped := strip.StripTags(description.String())
+		remediation := gjson.Get(value.String(), "remediation")
+		rem_stripped := strip.StripTags(remediation.String())
+
+		fmt.Fprintf(color.Output, "\t %v %v\n", cyanBG(" [*] DESCRIPTION:"), desc_stripped)
+		fmt.Fprintf(color.Output, "\t %v %v\n", greenBG(" [*] REMEDIATION:"), rem_stripped)
+
+		// var VulnNames []string
+		// for _, test := range value.Array() {
+		// 	//println(test.String())
+		// 	VulnNames = append(VulnNames, test.String())
+		// 	println(test.String())
+
+		// }
+
+		//fmt.Println(VulnNames)
 		//raw_issues := value.String()[1 : len(value.String())-1]
 	}
 
