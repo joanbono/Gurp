@@ -56,8 +56,12 @@ func init() {
 func main() {
 	flaggy.Parse()
 
-	//configure.Configurer("test test")
-	//fmt.Println(target, port)
+	// Check how many args are provided
+	if len(os.Args) < 2 { 
+		fmt.Fprintf(color.Output, "\n %v No argument provided. Try with %v.\n\n", cyan("[i] INFO:"), green("gurp -h"))
+		os.Exit(0)
+	}
+
 	if version == true {
 		fmt.Fprintf(color.Output, "%v Gurp %v.\n", cyan(" [i] INFO:"), VERSION)
 		os.Exit(0)

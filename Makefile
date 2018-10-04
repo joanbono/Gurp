@@ -28,10 +28,10 @@ deps:
 	go get -u -v github.com/akavel/rsrc
 
 .PHONY: release
-release: windows darwin linux
+release: darwin linux windows
 
 .PHONY: dev
-dev: windows-dev darwin-dev linux-dev
+dev: darwin-dev linux-dev windows-dev
 
 .PHONY: clean
 clean:
