@@ -30,6 +30,11 @@ deps:
 .PHONY: release
 release: darwin linux windows
 
+.PHONY: install
+install: 
+	go build -o gurp
+	mv gurp $(GOPATH)/bin
+
 .PHONY: dev
 dev: darwin-dev linux-dev windows-dev
 
