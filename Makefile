@@ -19,6 +19,14 @@ zip = cd build && zip $(APPNAME)_$(1)_$(2).zip $(BINARY)_$(1)_$(2)$(3) && rm $(B
 .PHONY: all
 all: release
 
+.PHONY: deps
+deps:
+	go get -u -v github.com/fatih/color
+	go get -u -v github.com/integrii/flaggy
+	go get -u -v github.com/tidwall/gjson
+	go get -u -v github.com/grokify/html-strip-tags-go
+	go get -u -v github.com/akavel/rsrc
+
 .PHONY: release
 release: windows darwin linux
 
