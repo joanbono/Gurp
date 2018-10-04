@@ -100,6 +100,7 @@ windows-dev: windows_386 windows_amd64
 
 .PHONY: windows_386
 windows_386: $(sources)
+	rsrc -manifest Gurp.manifest -ico "img/Gurp_icon.ico" -o rsrc.syso
 	$(call cmd,windows,386,.exe)
 
 .PHONY: windows_386.zip
@@ -108,6 +109,7 @@ windows_386.zip: windows_386
 
 .PHONY: windows_amd64
 windows_amd64: $(sources)
+	rsrc -manifest Gurp.manifest -ico "img/Gurp_icon.ico" -o rsrc.syso
 	$(call cmd,windows,amd64,.exe)
 
 .PHONY: windows_amd64.zip

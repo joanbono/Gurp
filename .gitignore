@@ -148,3 +148,6 @@ build
 
 # vscode folder
 .vscode/*
+
+# rsrc syso output
+*.syso
