@@ -41,7 +41,7 @@ func GetMetrics(target, port, Location, apikey string) {
 	if apikey != "" {
 		endpoint = "http://" + target + ":" + port + "/" + apikey + "/v0.1/scan/" + Location
 	} else {
-		endpoint = "http://" + target + ":" + port + "/v0.1/scan" + Location
+		endpoint = "http://" + target + ":" + port + "/v0.1/scan/" + Location
 	}
 
 	resp, err := client.Get(endpoint)
@@ -87,7 +87,7 @@ func GetScan(target, port, Location, exportFolder, apikey string) {
 	if apikey != "" {
 		endpoint = "http://" + target + ":" + port + "/" + apikey + "/v0.1/scan/" + Location
 	} else {
-		endpoint = "http://" + target + ":" + port + "/v0.1/scan" + Location
+		endpoint = "http://" + target + ":" + port + "/v0.1/scan/" + Location
 	}
 
 	resp, err := client.Get(endpoint)
