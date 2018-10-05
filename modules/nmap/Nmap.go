@@ -18,15 +18,20 @@
 package nmap
 
 import (
+	"bufio"
 	"errors"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
 
+	"github.com/fatih/color"
 	nmap "github.com/tomsteele/go-nmap"
 )
+
+var red = color.New(color.Bold, color.FgRed).SprintfFunc()
 
 //ParseNmap returns a slice of targets
 func ParseNmap(fileName string) (result []string, err error) {
@@ -60,5 +65,26 @@ func ParseNmap(fileName string) (result []string, err error) {
 		err = errors.New("This file is not an xml file")
 	}
 	return result, err
+
+}
+
+// ParseFile return a slice of targets
+func ParseFile(filename string) (result []string) {
+
+	file, err := os.Open(filename)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+	scanner := bufio.NewScanner(file)
+	Buf := make([]byte, 0, 2048*2048) //bytes.Buffer
+	scanner.Buffer(Buf, 10*2048*2048)
+
+	for scanner.Scan() {
+		target := scanner.Text()
+		result = append(result, target)
+	}
+
+	return result
 
 }
