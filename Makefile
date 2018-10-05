@@ -26,6 +26,7 @@ deps:
 	go get -u -v github.com/tidwall/gjson
 	go get -u -v github.com/grokify/html-strip-tags-go
 	go get -u -v github.com/akavel/rsrc
+	go get -u -v github.com/tomsteele/go-nmap
 
 .PHONY: release
 release: darwin linux windows

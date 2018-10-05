@@ -14,6 +14,7 @@ go get -u -v github.com/integrii/flaggy
 go get -u -v github.com/tidwall/gjson
 go get -u -v github.com/grokify/html-strip-tags-go
 go get -u -v github.com/akavel/rsrc
+go get -u -v github.com/tomsteele/go-nmap
 ```
 
 Add `rsrc` to the `$PATH` to build Windows binaries using the icon.
