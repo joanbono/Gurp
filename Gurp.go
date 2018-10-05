@@ -46,7 +46,7 @@ var username, password string = "", ""
 var key string = ""
 var description string = ""
 var metrics, issues bool = false, false
-var scan, scan_id, nmapScan string
+var scan, scan_id, scanList, nmapScan string
 var version, description_names bool = false, false
 
 func init() {
@@ -64,6 +64,7 @@ func init() {
 	flaggy.String(&scan_id, "S", "scan-id", "Scanned URL identifier")
 
 	flaggy.String(&nmapScan, "sn", "scan-nmap", "Nmap xml file to scan")
+	flaggy.String(&scanList, "sl", "scan-list", "File with hosts/Ip's to scan")
 
 	flaggy.Bool(&metrics, "M", "metrics", "Provides metrics for a given task")
 	flaggy.String(&description, "D", "description", "Provides description for a given issue")
@@ -99,7 +100,7 @@ func main() {
 
 		scanList, err := nmap.ParseNmap(nmapScan)
 		if err != nil {
-			fmt.Fprintf(color.Output, "%v Error:  %v.\n", red(" [-] ERROR:"), err)
+			fmt.Fprintf(color.Output, "%v  %v.\n", red(" [-] ERROR:"), err)
 			os.Exit(0)
 		}
 		for _, scan := range scanList {
@@ -112,6 +113,19 @@ func main() {
 			}
 		}
 
+	}
+
+	if scanList != "" {
+
+		targets := nmap.ParseFile(scanList)
+		for _, scan := range targets {
+			Location := configure.ScanConfig(target, port, scan, username, password, key)
+			if Location != "" {
+				fmt.Fprintf(color.Output, "%v Scanning %v over %v.\n", green(" [+] SUCCESS:"), scan, Location)
+			} else {
+				fmt.Fprintf(color.Output, "%v Can't start scan over %s .\n", red(" [-] ERROR:"), scan)
+			}
+		}
 	}
 
 	if scan != "" {
