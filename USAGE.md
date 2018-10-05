@@ -12,6 +12,7 @@ Gurp - Interact with Burp API  Flags:
     -P --password  Password for an authenticated scan
     -s --scan  URLs to scan
     -S --scan-id  Scanned URL identifier
+    -sn --scan-nmap  Nmap xml file to scan
     -M --metrics  Provides metrics for a given task
     -D --description  Provides description for a given issue
     -d --description-names  Returns vulnerability names from PortSwigger
@@ -28,6 +29,17 @@ go run Gurp.go -s "localhost.com/WebGoat/attack"
  [+] SUCCESS: Found Burp API endpoint on 127.0.0.1:1337.
  [i] INFO Setting up scanner...
  [+] SUCCESS: Scanning localhost.com/WebGoat/attack over 8.
+```
+
++ Create scans from a Nmap xml file
+
+```bash
+go run Gurp.go -sn nmapTest.xml
+ [+] SUCCESS: Found Burp API endpoint on 127.0.0.1:1337.
+ [i] INFO Setting up scanner...
+ [+] SUCCESS: Scanning http://127.0.0.123:80 over 3.
+ [i] INFO Setting up scanner...
+ [+] SUCCESS: Scanning https://127.0.0.123:443 over 4. 
 ```
 
 + Get Scan Metrics
