@@ -20,6 +20,7 @@ go get -u -v github.com/tomsteele/go-nmap
 Add `rsrc` to the `$PATH` to build Windows binaries using the icon.
 
 This can be automated by running `make deps` and `make all`.
+To install the binary in your `$GOPATH`, run `make install`.
 
 ***
 
