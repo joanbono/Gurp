@@ -13,6 +13,7 @@ Gurp - Interact with Burp API  Flags:
     -s --scan  URLs to scan
     -S --scan-id  Scanned URL identifier
     -sn --scan-nmap  Nmap xml file to scan
+    -sl --scan-list  File with hosts/Ip's to scan
     -M --metrics  Provides metrics for a given task
     -D --description  Provides description for a given issue
     -d --description-names  Returns vulnerability names from PortSwigger
@@ -40,6 +41,19 @@ go run Gurp.go -sn nmapTest.xml
  [+] SUCCESS: Scanning http://127.0.0.123:80 over 3.
  [i] INFO Setting up scanner...
  [+] SUCCESS: Scanning https://127.0.0.123:443 over 4. 
+```
+
++ Create scans from a  file
+
+```bash
+go run Gurp.go -sl test.txt
+ [+] SUCCESS: Found Burp API endpoint on 127.0.0.1:1337.
+ [i] INFO Setting up scanner...
+ [-] ERROR: Can't start scan over www.fakedfsdfsdf.org .
+ [i] INFO Setting up scanner...
+ [+] SUCCESS: Scanning 192.168.1.2 over 28.
+ [i] INFO Setting up scanner...
+ [+] SUCCESS: Scanning 192.123.3.1:80 over 29.
 ```
 
 + Get Scan Metrics
