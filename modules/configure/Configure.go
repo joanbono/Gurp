@@ -117,9 +117,9 @@ func ScanConfig(target, port, urls, username, password, apikey string) (ScanLoca
 	Location := resp.Header.Get("Location")
 	defer resp.Body.Close()
 
-	if resp.StatusCode != 201 {
-		fmt.Println("Error")
-	}
+	//if resp.StatusCode != 201 {
+		//fmt.Println("Error")
+	//}
 
 	return Location
 }
