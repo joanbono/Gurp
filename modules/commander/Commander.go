@@ -137,6 +137,10 @@ func GetScan(target, port, Location, exportFolder, apikey string) {
 			index = append(index, criticity.String())
 		}
 
+		if len(index) == 0 {
+			fmt.Fprintf(color.Output, "%v No issues found.\n", cyan(" [i] INFO:"))
+		}
+
 		// Printing issue names removing duplicates
 		for k, name := range issue_names.Array() {
 			if issue_uniq != name.String() {
