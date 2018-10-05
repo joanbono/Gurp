@@ -28,6 +28,7 @@ import (
 
 	"github.com/joanbono/Gurp/modules/commander"
 	"github.com/joanbono/Gurp/modules/configure"
+	"github.com/joanbono/Gurp/modules/nmap"
 )
 
 // Defining colors
@@ -45,7 +46,7 @@ var username, password string = "", ""
 var key string = ""
 var description string = ""
 var metrics, issues bool = false, false
-var scan, scan_id string
+var scan, scan_id, nmapScan string
 var version, description_names bool = false, false
 
 func init() {
@@ -62,6 +63,8 @@ func init() {
 	flaggy.String(&scan, "s", "scan", "URLs to scan")
 	flaggy.String(&scan_id, "S", "scan-id", "Scanned URL identifier")
 
+	flaggy.String(&nmapScan, "sn", "scan-nmap", "Nmap xml file to scan")
+
 	flaggy.Bool(&metrics, "M", "metrics", "Provides metrics for a given task")
 	flaggy.String(&description, "D", "description", "Provides description for a given issue")
 	flaggy.Bool(&description_names, "d", "description-names", "Returns vulnerability names from PortSwigger")
@@ -76,7 +79,7 @@ func main() {
 	flaggy.Parse()
 
 	// Check how many args are provided
-	if len(os.Args) < 2 { 
+	if len(os.Args) < 2 {
 		fmt.Fprintf(color.Output, "\n %v No argument provided. Try with %v.\n\n", cyan("[i] INFO:"), green("gurp -h"))
 		os.Exit(0)
 	}
@@ -90,6 +93,25 @@ func main() {
 	} else {
 		fmt.Fprintf(color.Output, "%v No Burp API endpoint found on %v.\n", red(" [-] ERROR:"), target+":"+port)
 		os.Exit(0)
+	}
+
+	if nmapScan != "" {
+
+		scanList, err := nmap.ParseNmap(nmapScan)
+		if err != nil {
+			fmt.Fprintf(color.Output, "%v Error:  %v.\n", red(" [-] ERROR:"), err)
+			os.Exit(0)
+		}
+		for _, scan := range scanList {
+			Location := configure.ScanConfig(target, port, scan, username, password, key)
+			if Location != "" {
+				fmt.Fprintf(color.Output, "%v Scanning %v over %v.\n", green(" [+] SUCCESS:"), scan, Location)
+			} else {
+				fmt.Fprintf(color.Output, "%v Can't start scan .\n", red(" [-] ERROR:"))
+				os.Exit(0)
+			}
+		}
+
 	}
 
 	if scan != "" {
