@@ -28,7 +28,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/fatih/color"
+	"github.com/joanbono/color"
 	strip "github.com/grokify/html-strip-tags-go"
 	"github.com/tidwall/gjson"
 )

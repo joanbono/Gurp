@@ -23,7 +23,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/fatih/color"
+	"github.com/joanbono/color"
 	"github.com/integrii/flaggy"
 
 	"github.com/joanbono/Gurp/modules/commander"
@@ -37,7 +37,7 @@ var red = color.New(color.Bold, color.FgRed).SprintfFunc()
 var cyan = color.New(color.Bold, color.FgCyan).SprintfFunc()
 var green = color.New(color.Bold, color.FgGreen).SprintfFunc()
 
-var VERSION = `1.1.0`
+var VERSION = `1.1.1`
 
 //var BurpAPI, username, password, ApiToken string
 var target, port string = "127.0.0.1", "1337"

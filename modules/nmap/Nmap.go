@@ -27,7 +27,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/fatih/color"
+	"github.com/joanbono/color"
 	nmap "github.com/tomsteele/go-nmap"
 )
 

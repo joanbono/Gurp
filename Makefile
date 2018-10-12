@@ -21,7 +21,7 @@ all: release
 
 .PHONY: deps
 deps:
-	go get -u -v github.com/fatih/color
+	go get -u -v github.com/joanbono/color
 	go get -u -v github.com/integrii/flaggy
 	go get -u -v github.com/tidwall/gjson
 	go get -u -v github.com/grokify/html-strip-tags-go

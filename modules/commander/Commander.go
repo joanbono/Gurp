@@ -27,7 +27,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/fatih/color"
+	"github.com/joanbono/color"
 	"github.com/tidwall/gjson"
 )
 
