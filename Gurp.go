@@ -23,8 +23,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/joanbono/color"
 	"github.com/integrii/flaggy"
+	"github.com/joanbono/color"
 
 	"github.com/joanbono/Gurp/modules/commander"
 	"github.com/joanbono/Gurp/modules/configure"

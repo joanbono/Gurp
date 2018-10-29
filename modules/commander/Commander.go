@@ -48,13 +48,7 @@ var tr = &http.Transport{
 
 var client = &http.Client{Timeout: time.Second * 5, Transport: tr}
 
-func Printer(test string) {
-	fmt.Fprintf(color.Output, "%v %v TEST\n", red(" [-] ERROR"), test)
-	fmt.Fprintf(color.Output, "%v %v TEST\n", yellow(" [!] ALERT"), test)
-	fmt.Fprintf(color.Output, "%v %v TEST\n", cyan(" [i] INFO"), test)
-	fmt.Fprintf(color.Output, "%v %v TEST\n", green(" [+] SUCCESS"), test)
-}
-
+// Get Metrics from scans
 func GetMetrics(target, port, Location, apikey string) {
 	var endpoint string
 	if apikey != "" {
@@ -100,6 +94,7 @@ func GetMetrics(target, port, Location, apikey string) {
 	}
 }
 
+// Get Scan information from a given location
 func GetScan(target, port, Location, exportFolder, apikey string) {
 	var issue_uniq string = ""
 	var endpoint string

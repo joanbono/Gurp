@@ -28,8 +28,8 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/joanbono/color"
 	strip "github.com/grokify/html-strip-tags-go"
+	"github.com/joanbono/color"
 	"github.com/tidwall/gjson"
 )
 
@@ -50,17 +50,7 @@ var tr = &http.Transport{
 
 var client = &http.Client{Timeout: time.Second * 5, Transport: tr}
 
-// [+] Check Burp Connection alive
-// [ ] Check if API is valid
-// [ ] Initialize Burp
-
-func Configurer(test string) {
-	fmt.Fprintf(color.Output, "%v %v TEST\n", red(" [-] ERROR"), test)
-	fmt.Fprintf(color.Output, "%v %v TEST\n", yellow(" [!] ALERT"), test)
-	fmt.Fprintf(color.Output, "%v %v TEST\n", cyan(" [i] INFO"), test)
-	fmt.Fprintf(color.Output, "%v %v TEST\n", green(" [+] SUCCESS"), test)
-}
-
+// Check if BURP is alive and with API Ready to be used
 func CheckBurp(target, port, apikey string) (response bool) {
 	var endpoint string
 	if apikey != "" {
@@ -85,6 +75,7 @@ func CheckBurp(target, port, apikey string) (response bool) {
 
 }
 
+// Configures a New scan and returns the location
 func ScanConfig(target, port, urls, username, password, apikey string) (ScanLocation string) {
 	var endpoint string
 	if apikey != "" {
@@ -118,12 +109,13 @@ func ScanConfig(target, port, urls, username, password, apikey string) (ScanLoca
 	defer resp.Body.Close()
 
 	//if resp.StatusCode != 201 {
-		//fmt.Println("Error")
+	//fmt.Println("Error")
 	//}
 
 	return Location
 }
 
+// Get issue description from Burp's database
 func GetDescription(target, port, issueName, apikey string) {
 	var endpoint string
 	if apikey != "" {
@@ -160,6 +152,7 @@ func GetDescription(target, port, issueName, apikey string) {
 
 }
 
+// Get Issue Names from Burp Database
 func GetNames(target, port, apikey string) {
 	var endpoint string
 	if apikey != "" {
