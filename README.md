@@ -1,5 +1,7 @@
 ![](img/Gurp_banner.png)
 
+[![Go Report Card](https://goreportcard.com/badge/github.com/joanbono/Gurp)](https://goreportcard.com/report/github.com/joanbono/Gurp)
+
 ## Requirements
 
 + BurpSuite Professional version `v2.0.0beta` or greater from [PortSwigger](https://portswigger.net/burp)
